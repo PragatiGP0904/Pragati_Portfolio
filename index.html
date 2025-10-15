@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pragati GP — Cosmic Journey</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+<!-- Typed -->
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+<style>
+:root{
+  --text:#EAF0FF; --muted:#A9B0C7; --glass:rgba(255,255,255,.08); --border:rgba(255,255,255,.18);
+  --p1:#7ee8fa; --p2:#a78bfa; --p3:#eec0f4;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--text);background:#05070c;overflow-x:hidden;cursor:none;}
+a{color:var(--text);text-decoration:none}
+
+.bg-video{position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-3;filter:brightness(.82) saturate(1.08)}
+
+header{position:sticky;top:0;z-index:20;background:linear-gradient(to bottom,rgba(3,6,15,.7),rgba(3,6,15,0));
+  border-bottom:1px solid var(--border);backdrop-filter:blur(14px)}
+.nav{width:min(1150px,92%);margin:auto;padding:12px 0;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:40px;height:40px;border-radius:12px;background:conic-gradient(var(--p1),var(--p2),var(--p3));box-shadow:0 0 20px rgba(126,232,250,.5)}
+.links{display:flex;gap:20px}
+.btn{display:inline-block;padding:12px 18px;border-radius:16px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));color:#0b0f1a;font-weight:800;position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);transform:translateX(-120%);transition:.5s}
+.btn:hover::after{transform:translateX(120%)}
+
+main{width:min(1150px,92%);margin:auto}
+section{padding:90px 0}
+
+/* HERO */
+.hero{min-height:92vh;display:grid;place-items:center;text-align:center;position:relative}
+.hero h1{font-size:clamp(2.8rem,2rem + 5vw,5.6rem);text-shadow:0 0 40px rgba(126,232,250,.5);margin-bottom:10px}
+.typing{display:inline;font-size:clamp(1.2rem,1rem + 1.2vw,1.8rem);font-weight:800}
+.typed-cursor{display:inline;vertical-align:baseline;font-weight:800}
+.sub{max-width:760px;margin:14px auto 22px;color:var(--muted)}
+.astro{position:absolute;right:6%;top:20%;width:min(26vw,220px);filter:drop-shadow(0 12px 40px rgba(167,139,250,.25));animation:float 6s ease-in-out infinite}
+@keyframes float{0%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(2deg)}100%{transform:translateY(0) rotate(-4deg)}}
+
+/* Earth + About */
+.earth-wrap{position:relative;min-height:560px;display:flex;justify-content:center}
+.earth{width:min(64vw,640px);filter:drop-shadow(0 0 50px rgba(34,68,255,.6))}
+.section-head h2{font-size:clamp(1.9rem,1.5rem + 2vw,3rem);font-weight:800;margin:18px 0}
+.about-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px;align-items:start}
+.glass{background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);border-radius:22px;padding:20px}
+.about-photo{height:260px;border-radius:18px;overflow:hidden;border:1px solid var(--border);}
+.about-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Journey line + rocket */
+.journey{position:relative}
+#flight-svg{position:absolute;left:50%;transform:translateX(-50%);top:0;width:520px;height:1800px;overflow:visible;pointer-events:none}
+#flight-path{stroke:url(#pathGlow);stroke-width:4;fill:none;stroke-linecap:round;stroke-dasharray:10 12}
+.rocket{position:absolute;left:50%;transform:translate(-50%,-50%);width:min(16vw,120px);z-index:5;filter:drop-shadow(0 0 12px rgba(126,232,250,.5))}
+
+/* Project cards (with images) */
+.stops{position:relative;z-index:3;margin-top:80px}
+.stop{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin:160px 0}
+.stop:nth-child(even){direction:rtl}
+.stop:nth-child(even) > *{direction:ltr}
+.card{display:grid;grid-template-columns:160px 1fr;gap:18px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.05));
+  border:1px solid var(--border);backdrop-filter:blur(14px);border-radius:28px;padding:18px;box-shadow:0 14px 44px rgba(0,0,0,.45)}
+.card img{width:160px;height:160px;border-radius:18px;object-fit:cover}
+.card h3{font-size:1.6rem;margin:0 0 6px}
+.card p{color:var(--muted);margin-bottom:12px}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--glass);font-weight:600}
+
+/* Moon + sparkles */
+.moon-wrap{position:relative;display:flex;justify-content:center;min-height:560px}
+.moon{width:min(40vw,420px);position:relative;z-index:2;filter:drop-shadow(0 0 70px rgba(217,217,221,.7))}
+.sparkle{position:absolute;width:6px;height:6px;background:#fff;border-radius:50%;pointer-events:none;filter:drop-shadow(0 0 8px #fff)}
+
+/* Star cursor */
+.cursor-star{position:fixed;left:0;top:0;z-index:1000;pointer-events:none;width:20px;height:20px;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.9))}
+.cursor-star::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(135deg,#fff, #fff);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation:starPulse 1.6s ease-in-out infinite;
+}
+@keyframes starPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+footer{padding:36px 0;border-top:1px solid var(--border);text-align:center;opacity:.92}
+
+@media (max-width:950px){
+  #flight-svg{width:84vw}
+  .about-grid{grid-template-columns:1fr}
+  .card{grid-template-columns:1fr}
+  .card img{width:100%;height:200px}
+}
+</style>
+</head>
+<body>
+  <!-- Background video -->
+  <video class="bg-video" src="assets/spacebg.mp4" autoplay muted loop playsinline></video>
+
+  <!-- Custom star cursor -->
+  <div class="cursor-star" id="cursorStar"></div>
+
+  <header>
+    <div class="nav">
+      <div class="brand"><div class="logo"></div><b>Pragati<span style="background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));-webkit-background-clip:text;background-clip:text;color:transparent">.gp</span></b></div>
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a class="btn" href="https://github.com/PragatiGP0904" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <img id="astro" class="astro" src="assets/astronaut.png" alt="Floating astronaut">
+      <div>
+        <h1>Pragati GP</h1>
+        <span id="typing" class="typing"></span>
+        <p class="sub">Crafting digital experiences, one universe at a time.</p>
+        <a href="#about" class="btn">Start the Journey</a>
+      </div>
+    </section>
+
+    <!-- EARTH + ABOUT -->
+    <section id="about">
+      <div class="earth-wrap">
+        <img class="earth" src="assets/earth.gif" alt="Earth">
+      </div>
+
+      <div class="section-head"><h2>About Me</h2></div>
+      <div class="about-grid">
+        <div class="glass">
+          I’m Pragati — a space-suit wearing <b>UI/UX astronaut</b> who loves charting new design galaxies. 
+          I pilot interfaces, orbit around delightful micro-interactions, and occasionally land on 3D moons in Blender.
+          Tools in my flight-kit: Figma, Canva, Adobe Animate, HTML/CSS/JS, Unity, Java, Python, and C.
+        </div>
+        <div class="about-photo"><img src="assets/Aboutmepic.jpg" alt="Pragati photo"></div>
+      </div>
+    </section>
+
+    <!-- PROJECTS + JOURNEY -->
+    <section class="journey" id="projects">
+      <!-- Animated path (S-curve) -->
+      <svg id="flight-svg" viewBox="0 0 520 1800" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="pathGlow" x1="0" x2="1">
+            <stop offset="0%" stop-color="#7ee8fa"/>
+            <stop offset="50%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#eec0f4"/>
+          </linearGradient>
+        </defs>
+        <path id="flight-path"
+          d="M260,40
+             C 160,140 160,260 280,340
+             C 420,430 440,560 280,650
+             C 140,740 120,860 260,950
+             C 400,1040 420,1160 260,1250
+             C 130,1330 120,1460 260,1550
+             C 380,1640 380,1720 300,1770" />
+      </svg>
+
+      <!-- Rocket that auto-tilts with the path -->
+      <img id="rocket" class="rocket" src="assets/rocket.gif" alt="Rocket">
+
+      <div class="stops">
+        <!-- Left -->
+        <div class="stop">
+          <div class="card">
+            <img src="assets/Zenzone.jpg" alt="ZenZone">
+            <div>
+              <h3>ZenZone — Wellness UI</h3>
+              <p>Interactive mood garden with playful micro-interactions.</p>
+              <div class="badges"><span class="badge">Figma</span><span class="badge">UI/UX</span><span class="badge">Prototype</span></div>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <!-- Right -->
+        <div class="stop">
+          <div></div>
+          <div class="card">
+            <img src="assets/Figma.jpg" alt="Navarathiri">
+            <div>
+              <h3>Navarathiri — Festive Site</h3>
+              <p>Rhythmic motion & color for celebrations.</p>
+              <div class="badges"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JS</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Left -->
+        <div class="stop">
+          <div class="card">
+            <img src="assets/SentiCam.jpg" alt="SentiCam">
+            <div>
+              <h3>SentiCam — Sentiment Camera</h3>
+              <p>Camera UI that reacts to detected sentiments.</p>
+              <div class="badges"><span class="badge">Front-end</span><span class="badge">UI</span></div>
+            </div>
+          </div>
+          <div></div>
+        </div>
+        <!-- Right (Blender) -->
+        <div class="stop">
+          <div></div>
+          <div class="card">
+            <img src="assets/blender.jpg" alt="Blender">
+            <div>
+              <h3>Blender Models</h3>
+              <p>Low-poly classroom, nature scene, and a high-poly car (WIP).</p>
+              <div class="badges"><span class="badge">Blender</span><span class="badge">3D</span><span class="badge">Rendering</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Right (Animation & Art) -->
+        <div class="stop">
+          <div></div>
+          <div class="card">
+            <img src="assets/Animation_Art.jpg" alt="Animation & Art">
+            <div>
+              <h3>Animation & Art</h3>
+              <p>2D animation, digital art, and logo explorations (Mist of Eye, BlueOcean, SpaceSight).</p>
+              <div class="badges"><span class="badge">Adobe Animate</span><span class="badge">Illustration</span><span class="badge">Branding</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOON destination -->
+    <section class="moon-wrap">
+      <img class="moon" id="moon" src="assets/moon.gif" alt="Moon">
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="about-grid">
+        <form class="glass" onsubmit="event.preventDefault();alert('Thanks! I will reply at gppragati@gmail.com');">
+          <h3 style="margin-bottom:12px">Contact</h3>
+          <input placeholder="Your name" required>
+          <input type="email" placeholder="Your email" required>
+          <textarea placeholder="Message" rows="5" required></textarea>
+          <button class="btn" type="submit">Send</button>
+        </form>
+        <div class="glass">
+          <b>Reach me</b><br><br>
+          Email: gppragati@gmail.com<br>
+          Phone: +91 9940487145<br>
+          GitHub: github.com/PragatiGP0904<br>
+          LinkedIn: linkedin.com/in/pragati-gp-1441ba32a/
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="y"></span> Pragati GP • Cosmic Journey</footer>
+
+<script>
+  // Year + typed
+  document.getElementById('y').textContent = new Date().getFullYear();
+  new Typed('#typing',{
+    strings:[
+      "Hello, I'm Pragati",
+      "UI/UX Designer",
+      "Illustrator",
+      "Logo Designer",
+      "Creative Developer"
+    ],
+    typeSpeed:60, backSpeed:40, backDelay:1000, loop:true, smartBackspace:true, cursorChar:'|'
+  });
+
+  // Astronaut fallback name + mouse parallax
+  const astro=document.getElementById('astro');
+  astro.onerror=()=>{ astro.src='assets/astronaunt.png'; };
+  window.addEventListener('pointermove',e=>{
+    const x=(e.clientX/innerWidth-.5)*2, y=(e.clientY/innerHeight-.5)*2;
+    gsap.to(astro,{x:x*12,y:y*8,duration:.4,ease:'power2.out'});
+  });
+
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+  // Earth reveal
+  gsap.from('.earth',{y:100,opacity:0,scale:.9,duration:1,scrollTrigger:{trigger:'#about',start:'top 85%'}});
+
+  // ===== Rocket follows path (tilts with curve) =====
+  const path = document.getElementById('flight-path');
+  const rocket = document.getElementById('rocket');
+  const moon = document.getElementById('moon');
+
+  // If your rocket.gif points UP by default, a -90° offset makes its nose lead the path.
+  const ROCKET_ROT_OFFSET = -90; // change to 0 if your gif already faces right along the path
+
+  const journey = ScrollTrigger.create({
+    trigger:'#projects',
+    start:'top 70%',
+    endTrigger:'.moon-wrap',
+    end:'top center',
+    scrub:true
+  });
+
+  // Draw the line
+  const len = path.getTotalLength();
+  path.style.strokeDasharray = len;
+  path.style.strokeDashoffset = len;
+  gsap.to(path,{strokeDashoffset:0,ease:'none',scrollTrigger:journey});
+
+  // Rocket motion + autoRotate with offset
+  gsap.set(rocket,{xPercent:-50, yPercent:-50, rotate:ROCKET_ROT_OFFSET});
+  gsap.to(rocket,{
+    motionPath:{
+      path:path,
+      align:path,
+      autoRotate:{velocity:1, degrees:ROCKET_ROT_OFFSET}, // tilt with curve
+      alignOrigin:[0.5,0.5]
+    },
+    ease:'none',
+    scrollTrigger:journey,
+    onUpdate(self){
+      const p=self.progress;
+      if(p>0.985 && !rocket._finished){
+        rocket._finished=true;
+        rocket.style.zIndex=1; // behind the moon (moon is z-index 2)
+        gsap.to(rocket,{opacity:0,duration:.55,ease:'power2.out'});
+        burstSparkles(moon);   // pretty effect at arrival
+      }else if(p<=0.985 && rocket._finished){
+        rocket._finished=false;
+        rocket.style.zIndex=5;
+        gsap.set(rocket,{opacity:1});
+      }
+    }
+  });
+
+  // Card reveals
+  gsap.utils.toArray('.card').forEach((el,i)=>{
+    gsap.from(el,{y:40,opacity:0,scale:.96,duration:.8,scrollTrigger:{trigger:el,start:'top 85%'}});
+  });
+
+  // ===== Sparkle/Twinkle utilities =====
+  function burstSparkles(targetEl){
+    const rect=targetEl.getBoundingClientRect();
+    const cx=rect.left+rect.width/2+window.scrollX;
+    const cy=rect.top+rect.height/2+window.scrollY;
+    const N=24;
+    for(let i=0;i<N;i++){
+      const s=document.createElement('div');
+      s.className='sparkle';
+      document.body.appendChild(s);
+      const angle=(i/N)*Math.PI*2, dist=24+Math.random()*100;
+      gsap.set(s,{left:cx, top:cy, width:6+Math.random()*6, height:6+Math.random()*6, background:i%3? '#fff' : '#7ee8fa'});
+      gsap.to(s,{
+        x:Math.cos(angle)*dist, y:Math.sin(angle)*dist, opacity:0,
+        scale:1.2+Math.random()*0.8, duration:.9+Math.random()*0.6, ease:'power2.out',
+        onComplete(){ s.remove(); }
+      });
+    }
+  }
+
+  // ===== Star cursor that glows and twinkles on click =====
+  const cursor = document.getElementById('cursorStar');
+  const qx = gsap.quickTo(cursor, "left", {duration:0.15, ease:"power3"});
+  const qy = gsap.quickTo(cursor, "top",  {duration:0.15, ease:"power3"});
+  window.addEventListener('pointermove', e => { qx(e.clientX-10); qy(e.clientY-10); });
+  window.addEventListener('click', e => {
+    // mini twinkle burst at pointer
+    const fake = document.createElement('div');
+    fake.className='sparkle';
+    document.body.appendChild(fake);
+    gsap.set(fake,{left:e.pageX, top:e.pageY, width:6, height:6});
+    gsap.to(fake,{scale:3, opacity:0, duration:.5, ease:'power2.out', onComplete(){ fake.remove(); }});
+  });
+</script>
+</body>
+</html>
