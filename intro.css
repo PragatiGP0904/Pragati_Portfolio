@@ -1,0 +1,204 @@
+/* CINEMATIC INTRO STYLES */
+#intro-spacer {
+  height: 350vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+#intro-viewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  visibility: visible;
+}
+
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  filter: brightness(1.2);
+  z-index: 101;
+}
+
+.intro-planet {
+  position: absolute;
+  height: auto;
+  object-fit: contain;
+  will-change: transform, opacity;
+  opacity: 0;
+}
+
+#introPlanet1 {
+  width: min(15vw, 100px);
+  z-index: 102;
+  filter: blur(1px);
+}
+
+#introPlanet2 {
+  width: min(22vw, 160px);
+  z-index: 103;
+}
+
+#introPlanet3 {
+  width: min(30vw, 240px);
+  z-index: 104;
+}
+
+.intro-text-cluster {
+  position: relative;
+  z-index: 110;
+  text-align: center;
+  width: 90%;
+}
+
+.intro-text-cluster h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+  margin-bottom: 12px;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0) 70%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textShimmer 6s infinite linear;
+}
+
+.intro-text-cluster p {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  letter-spacing: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: -100% center
+  }
+
+  100% {
+    background-position: 100% center
+  }
+}
+
+/* BACKGROUND DECOR (EXTENSION) */
+.bg-element {
+  position: absolute;
+  object-fit: contain;
+  opacity: 0.35;
+  filter: blur(2px) saturate(0.7);
+  pointer-events: none;
+  width: min(8vw, 60px);
+  z-index: 90;
+  will-change: transform, opacity;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 110;
+}
+
+.triangle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: indicatorBreathe 3s infinite ease-in-out;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+}
+
+@keyframes indicatorBreathe {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+.scroll-hint p {
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 15px;
+}
+
+/* NEBULA */
+.intro-nebula-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-nebula {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  opacity: 1;
+  will-change: transform, opacity;
+}
+
+/* ENTERING TEXT */
+#entering-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 120;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: #fff;
+  opacity: 0;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff0, #fff 50%, #fff0 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: enterShimmer 3s infinite linear;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes enterShimmer {
+  to {
+    background-position: 200% center;
+  }
+}

@@ -1,0 +1,998 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pragati GP – Cosmic Journey</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+  <!-- Typed -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <link rel="stylesheet" href="intro.css">
+
+  <style>
+    :root {
+      --text: #EAF0FF;
+      --muted: #A9B0C7;
+      --glass: rgba(255, 255, 255, .08);
+      --border: rgba(255, 255, 255, .18);
+      --p1: #7ee8fa;
+      --p2: #a78bfa;
+      --p3: #eec0f4;
+      --space-bg: #05070c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--space-bg);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -3;
+      filter: brightness(.82) saturate(1.08);
+      pointer-events: none;
+    }
+
+
+    /* SITE ELEMENTS */
+    header,
+    main {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    header.visible,
+    main.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(to bottom, rgba(3, 6, 15, .7), rgba(3, 6, 15, 0));
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(1150px, 92%);
+      margin: auto;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .brand b {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(126, 232, 250, .3));
+    }
+
+    .links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .links>a:not(.btn) {
+      position: relative;
+      padding: 8px 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color .3s ease;
+    }
+
+    .links>a:not(.btn)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--p1);
+      transition: width .3s ease;
+    }
+
+    .links>a:not(.btn):hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, rgba(126, 232, 250, .1), rgba(167, 139, 250, .1));
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 20%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: rotate(30deg);
+      transition: none;
+      filter: blur(5px);
+      animation: btnShine 4s infinite;
+    }
+
+    @keyframes btnShine {
+      0% {
+        left: -60%;
+      }
+
+      20% {
+        left: 140%;
+      }
+
+      100% {
+        left: 140%;
+      }
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(126, 232, 250, 0.2);
+    }
+
+    main {
+      width: min(1150px, 92%);
+      margin: auto;
+    }
+
+    section {
+      padding: 120px 0;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 6vw, 6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 15px;
+      text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .typing {
+      display: inline-block;
+      font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+      font-weight: 600;
+      text-shadow: 0 0 24px rgba(167, 139, 250, .5);
+      vertical-align: middle;
+    }
+
+    .typed-cursor {
+      font-size: 2.6rem;
+      color: #FFFFFF;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      max-width: 500px;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+      background: linear-gradient(90deg, #7ee8fa, #a78bfa, #eec0f4, #7ee8fa);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: taglineShimmer 4s linear infinite;
+    }
+
+    @keyframes taglineShimmer {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    .astro {
+      position: absolute;
+      right: 5%;
+      top: 10%;
+      width: min(35vw, 350px);
+      filter: drop-shadow(0 20px 60px rgba(126, 232, 250, 0.2));
+      animation: floatAstro 8s ease-in-out infinite;
+      z-index: 5;
+    }
+
+    @keyframes floatAstro {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(-30px) rotate(3deg);
+      }
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 50px;
+      align-items: stretch;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .about-visual {
+      display: flex;
+      justify-content: center;
+      perspective: 1000px;
+    }
+
+    .astronaut-flip-card {
+      position: relative;
+      width: 280px;
+      height: 100%;
+      min-height: 350px;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      animation: floatAboutCard 6s ease-in-out infinite;
+    }
+
+    .about-visual:hover .astronaut-flip-card {
+      transform: rotateY(180deg);
+    }
+
+    .astronaut-front,
+    .astronaut-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 25px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 0 30px rgba(126, 232, 250, 0.1);
+      transition: box-shadow 0.6s ease;
+    }
+
+    .astronaut-back {
+      transform: rotateY(180deg);
+    }
+
+    .astronaut-back::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(160, 241, 255, 0.8) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .about-visual:hover .astronaut-back::after {
+      animation: flipShine 1s ease-out 0.4s forwards;
+    }
+
+    @keyframes flipShine {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      30% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+
+    .about-visual:hover .astronaut-front,
+    .about-visual:hover .astronaut-back {
+      box-shadow: 0 0 50px rgba(167, 139, 250, 0.25);
+    }
+
+    .astronaut-front img,
+    .astronaut-back video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .glass-about-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 30px;
+      padding: 30px 40px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .glass-about-card h2 {
+      font-size: 2.1rem;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #fff, #a0f1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 20px rgba(160, 241, 255, 0.3);
+    }
+
+    .glass-about-card p {
+      margin-bottom: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      position: relative;
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px solid transparent;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)),
+        linear-gradient(135deg, #7ee8fa, #a78bfa, #eec0f4);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 10px 30px rgba(126, 232, 250, 0.3);
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -100%;
+      width: 40%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(35deg);
+      transition: none;
+      filter: blur(8px);
+    }
+
+    .cta-btn:hover::after {
+      left: 150%;
+      transition: left 0.7s ease-in-out;
+    }
+
+    .cta-btn:active {
+      transform: scale(0.98) translateY(0);
+    }
+
+    /* PROJECTS CAROUSEL */
+    .projects-carousel-section {
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-view {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+
+    .carousel-viewport {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      display: flex;
+      gap: 30px;
+      padding: 40px 0;
+      scroll-behavior: smooth;
+    }
+
+    .carousel-viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    .p-card-h {
+      flex: 0 0 300px;
+      height: 200px;
+      scroll-snap-align: center;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .p-card-h:hover {
+      transform: rotateY(180deg);
+    }
+
+    .p-front-h,
+    .p-back-h {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 15, 25, 0.7);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+
+    .p-front-h img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+    }
+
+    .p-back-h {
+      transform: rotateY(180deg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(10, 10, 20, 0.9);
+      border: 1px solid rgba(126, 232, 250, 0.4);
+    }
+
+    .p-back-h h4 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .p-back-h p {
+      font-size: 0.8rem;
+      color: #ccc;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .h-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .h-tag {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      background: rgba(126, 232, 250, 0.1);
+      border-radius: 10px;
+      color: #7ee8fa;
+    }
+
+    .p-card-h:hover .p-front-h,
+    .p-card-h:hover .p-back-h {
+      box-shadow: 0 0 30px rgba(126, 232, 250, 0.3);
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #7ee8fa;
+      box-shadow: 0 0 20px rgba(126, 232, 250, 0.2);
+    }
+
+    .carousel-arrow.prev {
+      left: 0;
+    }
+
+    .carousel-arrow.next {
+      right: 0;
+    }
+
+    /* INDICATORS */
+    .h-indicators {
+      position: absolute;
+      bottom: 5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 10;
+      opacity: 0.5;
+    }
+
+    .h-indicators i {
+      font-size: 1.5rem;
+      color: #7ee8fa;
+      animation: hArrowFade 2s infinite;
+    }
+
+    .h-indicators i:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .h-indicators i:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes hArrowFade {
+
+      0%,
+      100% {
+        opacity: 0.2;
+        transform: translateX(0);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(5px);
+      }
+    }
+
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor-star {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, #a0f1ff, transparent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: screen;
+      filter: blur(2px);
+    }
+
+    .cursor-trail {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 900px) {
+      .journey-h-wrap {
+        height: auto !important;
+      }
+
+      .journey-h-sticky {
+        position: relative !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .h-content {
+        flex-direction: column !important;
+        padding: 50px 20px !important;
+        gap: 80px !important;
+        transform: none !important;
+      }
+
+      .h-path-line,
+      .h-rocket,
+      .h-indicators {
+        display: none !important;
+      }
+
+      .h-project {
+        margin: 0 !important;
+      }
+
+      .h-project::before {
+        display: none !important;
+      }
+
+      .p-card-h {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .glass-about-card {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <video class="bg-video" src="assets/spacebg.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+  <div class="cursor-star" id="cursorStar"></div>
+
+  <!-- CINEMATIC INTRO -->
+  <div id="intro-spacer"></div>
+  <div id="intro-viewport">
+    <video src="assets/intro-particles.mp4" class="intro-particles" autoplay muted loop playsinline
+      aria-hidden="true"></video>
+
+    <div class="intro-nebula-wrap">
+      <img src="assets/intro-nebula-core.png" class="intro-nebula" id="introNebula" alt="Cosmic Nebula">
+    </div>
+
+    <div id="entering-text">Entering...</div>
+
+    <!-- Planets with scattered initial layout -->
+    <img src="assets/intro-planet-1.png" class="intro-planet" id="introPlanet1" style="left: 15%; top: 15%;"
+      alt="Far Planet">
+    <img src="assets/intro-planet-2.png" class="intro-planet" id="introPlanet2" style="right: 14%; top: 25%;"
+      alt="Mid Planet">
+    <img src="assets/planet-3.gif" class="intro-planet" id="introPlanet3" style="left: 12%; bottom: 20%;"
+      alt="Near Planet">
+
+    <!-- ULTRA-FAR BACKGROUND DECOR (EXTENSION) -->
+    <img src="assets/intro-planet-1.gif" class="bg-element" style="left: 10%; top: 10%;" alt="">
+    <img src="assets/planet-1.gif" class="bg-element" style="right: 15%; top: 40%;" alt="">
+    <img src="assets/galaxy.gif" class="bg-element" style="left: 15%; bottom: 15%;" alt="">
+    <img src="assets/particle.gif" class="bg-element" style="right: 20%; bottom: 20%;" alt="">
+    <img src="assets/planet-1.gif" class="bg-element" style="left: 30%; top: 70%;" alt="">
+    <img src="assets/galaxy.gif" class="bg-element" style="right: 5%; top: 15%;" alt="">
+
+    <div class="intro-text-cluster" id="introText">
+      <h1>Pragati's Cosmic World</h1>
+      <p>Design • Motion • Experience</p>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint">
+      <div class="triangle-wrap">
+        <div class="triangle"></div>
+      </div>
+      <p>Scroll Forward</p>
+    </div>
+  </div>
+
+  <header id="siteHeader">
+    <div class="nav">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+        <b>Pragati<span>.gp</span></b>
+      </div>
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a class="btn" href="https://github.com/PragatiGP0904" target="_blank" rel="noopener">My GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="siteMain">
+    <section class="hero" id="home">
+      <img id="astro" class="astro" src="assets/astronaut.png" alt="Astronaut">
+      <div class="hero-content">
+        <p style="text-transform: uppercase; letter-spacing: 4px; font-weight: 300; opacity: 0.7; margin-bottom: 20px;">
+          Welcome Traveler</p>
+        <h1>Pragati GP</h1>
+        <div id="typing" class="typing"></div>
+        <p class="tagline">Crafting digital universes through intuitive design and fluid animation.</p>
+        <div style="margin-top: 40px;"><a href="#about" class="btn">Start Journey</a></div>
+      </div>
+    </section>
+
+    <section id="about"
+      style="opacity: 0; transform: translateY(40px); padding: 50px 0; min-height: 50vh; display: flex; align-items: center;">
+      <div class="about-grid">
+        <div class="glass-about-card">
+          <h2>About Me</h2>
+          <p>Hi there! I’m <b>Pragati GP</b> — a BE Computer Science and Design student with a deep-seated passion for
+            the intersection of technology and aesthetics.</p>
+          <p>My journey is fueled by a curios mindset to build <b>visual, meaningful, and user-friendly experiences</b>.
+            Whether it's crafting fluid UI/UX, experimenting with 3D models, or diving into game development, I thrive
+            on bringing complex ideas to life through a balance of logic and design.</p>
+          <div class="cta-group">
+            <a href="assets/Pragati-GP-Resume-Final.pdf" class="cta-btn" download><i class="fas fa-file-download"></i>
+              Download Resume</a>
+            <a href="https://github.com/PragatiGP0904" class="cta-btn" target="_blank"><i class="fab fa-github"></i>
+              Follow My GitHub</a>
+          </div>
+        </div>
+        <div class="about-visual">
+          <div class="astronaut-flip-card">
+            <div class="astronaut-front">
+              <img src="assets/about-astronaut-real.png" alt="Pragati Real">
+            </div>
+            <div class="astronaut-back">
+              <video src="assets/about-astro-wave.mp4" autoplay muted loop playsinline></video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-carousel-section" id="projects">
+      <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; letter-spacing: 2px;">My Projects</h2>
+      <div class="carousel-view">
+        <div class="carousel-arrow prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></div>
+        <div class="carousel-arrow next" id="carouselNext"><i class="fas fa-chevron-right"></i></div>
+
+        <div class="carousel-viewport" id="carouselViewport">
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/Herbchain.png" alt="HerbChain"></div>
+            <div class="p-back-h">
+              <h4>HerbChain</h4>
+              <p>Blockchain platform for transparent herbal supply chains.</p>
+              <div class="h-tags">
+                <span class="h-tag">Blockchain</span>
+                <span class="h-tag">Sustainability</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/Senticam.jpg" alt="SentiCam"></div>
+            <div class="p-back-h">
+              <h4>SentiCam</h4>
+              <p>AI-powered emotion detection via real-time analysis.</p>
+              <div class="h-tags">
+                <span class="h-tag">AI</span>
+                <span class="h-tag">Python</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/Zenzone.jpg" alt="ZenZone"></div>
+            <div class="p-back-h">
+              <h4>ZenZone</h4>
+              <p>Mental wellness app with mood-based visuals.</p>
+              <div class="h-tags">
+                <span class="h-tag">UI/UX</span>
+                <span class="h-tag">React Native</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/Animation_Art.jpg" alt="Animation"></div>
+            <div class="p-back-h">
+              <h4>Digital Art</h4>
+              <p>2D animation and digital illustration experiments.</p>
+              <div class="h-tags">
+                <span class="h-tag">Animation</span>
+                <span class="h-tag">Art</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/blender.jpg" alt="Blender"></div>
+            <div class="p-back-h">
+              <h4>Blender 3D</h4>
+              <p>Low-poly environments and concept modeling.</p>
+              <div class="h-tags">
+                <span class="h-tag">3D</span>
+                <span class="h-tag">Blender</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/Figma.jpg" alt="Figma"></div>
+            <div class="p-back-h">
+              <h4>UI/UX (Figma)</h4>
+              <p>User-centered interface design and research.</p>
+              <div class="h-tags">
+                <span class="h-tag">Figma</span>
+                <span class="h-tag">UX</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-card-h" onclick="window.open('https://github.com/PragatiGP0904', '_blank')">
+            <div class="p-front-h"><img src="assets/intro-nebula-core.png" alt="AI Video"></div>
+            <div class="p-back-h">
+              <h4>AI Cinematic</h4>
+              <p>Generative art and cinematic storytelling experiments.</p>
+              <div class="h-tags">
+                <span class="h-tag">AI Video</span>
+                <span class="h-tag">Art</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="padding-bottom: 150px;">
+      <div class="about-grid">
+        <div class="glass">
+          <h2>Contact</h2>
+          <p>Email: gppragati@gmail.com</p>
+        </div>
+        <form class="glass" onsubmit="event.preventDefault();"><input type="text" placeholder="Name"
+            style="width:100%; padding:10px; margin-bottom:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:white; border-radius:10px;"><button
+            class="btn" type="submit">Send Signal</button></form>
+      </div>
+    </section>
+  </main>
+
+  <footer>&copy; <span id="year"></span> Pragati GP • Cosmic Journey</footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+    // Reset scroll and setup year
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // SINGLE CAMERA ZOOM REBUILD
+    // Initialized in intro.js
+
+    // RESTORED SITE LOGIC
+    new Typed('#typing', {
+      strings: ["Hello, I'm Pragati", "UI/UX Designer", "Illustrator", "Logo Designer", "Creative Developer"],
+      typeSpeed: 60, backSpeed: 40, backDelay: 1000, loop: true, smartBackspace: true
+    });
+
+    // PROJECTS CAROUSEL LOGIC
+    const vp = document.getElementById('carouselViewport');
+    const pBtn = document.getElementById('carouselPrev');
+    const nBtn = document.getElementById('carouselNext');
+
+    if (vp && pBtn && nBtn) {
+      const scrollAmt = 330; // Card + gap
+      pBtn.onclick = () => vp.scrollBy({ left: -scrollAmt, behavior: 'smooth' });
+      nBtn.onclick = () => vp.scrollBy({ left: scrollAmt, behavior: 'smooth' });
+
+      vp.onscroll = () => {
+        const isStart = vp.scrollLeft <= 5;
+        const isEnd = vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 5;
+        pBtn.style.opacity = isStart ? '0.3' : '1';
+        pBtn.style.pointerEvents = isStart ? 'none' : 'auto';
+        nBtn.style.opacity = isEnd ? '0.3' : '1';
+        nBtn.style.pointerEvents = isEnd ? 'none' : 'auto';
+      };
+
+      // Init
+      pBtn.style.opacity = '0.3';
+      pBtn.style.pointerEvents = 'none';
+    }
+
+    // About Section Scroll Entrance
+    gsap.to("#about", {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#about",
+        start: "top 80%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    // CURSOR
+    const cursor = document.getElementById('cursorStar');
+    const mouse = { x: -100, y: -100 };
+    const pos = { x: 0, y: 0 };
+    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    gsap.ticker.add(() => {
+      pos.x += (mouse.x - pos.x) * 0.15; pos.y += (mouse.y - pos.y) * 0.15;
+      gsap.set(cursor, { x: pos.x - 10, y: pos.y - 10 });
+      if (Math.random() > 0.85) {
+        const t = document.createElement('div'); t.className = 'cursor-trail'; document.body.appendChild(t);
+        gsap.set(t, { x: mouse.x, y: mouse.y });
+        gsap.to(t, { opacity: 0, scale: 0, duration: 0.5, onComplete: () => t.remove() });
+      }
+    });
+  </script>
+  <script src="intro.js"></script>
+</body>
+
+</html>
